@@ -1,0 +1,55 @@
+docker mysql command
+$ docker run --name vsk8smysql -e MYSQL_ROOT_PASSWORD=password -d -p 3306:3306 mysql:latest
+
+docker library command
+$ docker run -it -d -p 8089:8089 library:0.1.0
+
+curl post command
+$ curl -X POST -H 'Content-Type: application/json' -d '{"Id":"2","Name":"Programming Kubnernetes","Isbn":"ISBN-2"}' localhost:8089/api/v1/books
+
+curl get command
+$ curl localhost:8089/api/v1/books
+
+
+Kubernetes commands
+
+create a secret
+kubectl create secret generic mysql-password -n database --from-literal rootpassword=password --dry-run=client -oyaml > secrets.yaml
+
+get a storage class
+kubectl get storageclasses.storage.k8s.io
+
+delete a pvc
+kubectl delete persistentvolumeclaim/mysql-pv-claim -n database
+
+create a deployment yaml
+kubectl create deployment restapi --image stark985/library:0.1.0 -n restapi --dry-run=client -oyaml > app_deployment.yaml
+
+create a configmap yaml
+kubectl create configmap restapi-cm -n restapi --from-literal host=localhost:3306 --from-literal dbname=library --dry-run=client -oyaml > configmap.yaml
+
+how to get endpoints in a namespace
+kubectl get endpoints -n database
+
+expose the deployment
+kubectl expose deployment restapi -n restapi --port 8089 --dry-run=client -oyaml > app_service.yaml
+
+port forward
+kubectl port-forward -n restapi svc/restapi 8089
+
+how to exec into the pod
+kubectl exec -it -n database mysql-688f68c98d-pph25 -- bash
+
+busybox test server for doing nslookup
+kubectl run -it --rm dns-test --image=busybox --restart=Never --namespace=restapi -- sh
+
+kind delete clusters --all
+kubectl cluster-info --context kind-kind
+kubectl logs -n kube-system -l k8s-app=kube-dns
+
+app
+deployment.apps/restapi
+configmap/restapi-cm
+service/restapi
+
+
