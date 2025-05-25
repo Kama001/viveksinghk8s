@@ -48,8 +48,16 @@ kubectl cluster-info --context kind-kind
 kubectl logs -n kube-system -l k8s-app=kube-dns
 
 app
-deployment.apps/restapi
-configmap/restapi-cm
-service/restapi
+deployment.apps/restapi ==> kubectl delete deployment.apps/restapi -n restapi
+configmap/restapi-cm ==> kubectl delete configmap/restapi-cm -n restapi
+service/restapi ==> kubectl delete service/restapi -n restapi
+kubectl delete secret/mysql-password -n restapi
+
+
+
+kubectl delete secret/mysql-password -n database
+kubectl delete persistentvolumeclaim/mysql-pv-claim -n database
+kubectl delete persistentvolume/mysql-pv-volume
+
 
 
